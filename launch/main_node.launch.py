@@ -20,17 +20,15 @@ def generate_launch_description():
             'calculator_file',
             default_value=PathJoinSubstitution([FindPackageShare('codes'),
                                                 'params', 'calculator.yaml']),
-            description='Full path to the file with all parameters.'
+            description=''
         )
     )
 
-    # Initialize arguments
     calculator_file = LaunchConfiguration('calculator_file')
 
-    # Define the lifecycle node (MainNode)
     calculator_lifecycle_node = LifecycleNode(
-    package='codes',  # Nome do pacote
-    executable='codes_main',  # Nome correto do executável
+    package='codes', 
+    executable='codes_main',
     name='calculator',
     namespace='',
     output='screen',
@@ -40,7 +38,6 @@ def generate_launch_description():
 
     event_handlers = []
 
-    # Right after the node starts, make it take the 'configure' transition
     event_handlers.append(
         RegisterEventHandler(
             OnProcessStart(
@@ -55,7 +52,6 @@ def generate_launch_description():
         ),
     )
 
-    # Transition from 'configuring' to 'inactive' then to 'active'
     event_handlers.append(
         RegisterEventHandler(
             OnStateTransition(
@@ -74,14 +70,11 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    # Declare the arguments
     for argument in declared_arguments:
         ld.add_action(argument)
 
-    # Add client node
     ld.add_action(calculator_lifecycle_node)
 
-    # Add event handlers
     for event_handler in event_handlers:
         ld.add_action(event_handler)
 
