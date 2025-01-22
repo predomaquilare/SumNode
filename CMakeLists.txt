@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(codes)  
+project(summer_school)  
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -14,50 +14,53 @@ find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
+set(dependencies
+  rclcpp
+  rclcpp_lifecycle
+  rclcpp_components
+  std_msgs
+  std_srvs
+)
+
 include_directories(
   include
 )
 
-add_library(codes_component SHARED
-  src/calculadoranode.cpp
+set(executable_name calculator)
+set(library_name ${executable_name}_core)
+
+add_executable(${executable_name}
+  src/main.cpp
 )
 
-ament_target_dependencies(codes_component
-  rclcpp
-  rclcpp_lifecycle
-  rclcpp_components
-  std_msgs
-  std_srvs
+add_library(${library_name} SHARED
+  src/calculator_node.cpp
 )
 
-rclcpp_components_register_nodes(codes_component "calculadora::MainNode")
+target_include_directories(${library_name} PRIVATE src/include)
 
-add_executable(codes_main
-  src/calculadoramain.cpp
+ament_target_dependencies(${executable_name}
+  ${dependencies}
 )
 
-ament_target_dependencies(codes_main
-  rclcpp
-  rclcpp_lifecycle
-  rclcpp_components
-  std_msgs
-  std_srvs
+target_link_libraries(${executable_name}
+  ${library_name}
 )
 
-target_link_libraries(codes_main
-  codes_component
+ament_target_dependencies(${library_name}
+  ${dependencies}
 )
 
-install(TARGETS
-  codes_component
+rclcpp_components_register_nodes(${library_name} "summer_school::CalculatorNode")
+
+install(TARGETS ${library_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
 
-install(TARGETS
-  codes_main
-  DESTINATION libexec/${PROJECT_NAME} 
+install(TARGETS ${executable_name}
+  DESTINATION lib/${PROJECT_NAME} 
 )
 
 install(DIRECTORY
@@ -70,4 +73,6 @@ install(DIRECTORY include/
   DESTINATION include/
 )
 
+ament_export_include_directories(include)
+ament_export_libraries(${library_name})
 ament_package()
