@@ -1,0 +1,4 @@
+calculator:
+  ros__parameters:
+    rate:
+      pub_result: 10.0
