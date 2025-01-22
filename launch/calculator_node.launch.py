@@ -18,7 +18,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'calculator_file',
-            default_value=PathJoinSubstitution([FindPackageShare('codes'),
+            default_value=PathJoinSubstitution([FindPackageShare('summer_school'),
                                                 'params', 'calculator.yaml']),
             description=''
         )
@@ -27,8 +27,8 @@ def generate_launch_description():
     calculator_file = LaunchConfiguration('calculator_file')
 
     calculator_lifecycle_node = LifecycleNode(
-    package='codes', 
-    executable='codes_main',
+    package='summer_school', 
+    executable='calculator',
     name='calculator',
     namespace='',
     output='screen',

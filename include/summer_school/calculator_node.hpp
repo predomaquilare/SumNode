@@ -1,20 +1,22 @@
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#ifndef SUMMER_SCHOOL__CALCULATOR_NODE_HPP_
+#define SUMMER_SCHOOL__CALCULATOR_NODE_HPP_
+
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
 #include "std_msgs/msg/float64_multi_array.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "std_msgs/msg/float64.hpp"
 #include "memory"
-#include "mutex"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-namespace calculadora
+namespace summer_school 
 {
-    class MainNode : public rclcpp_lifecycle::LifecycleNode
+    class CalculatorNode : public rclcpp_lifecycle::LifecycleNode
     {
     public:
-        explicit MainNode(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
-        ~MainNode() override;
+        explicit CalculatorNode(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
+        ~CalculatorNode() override;
 
     private:
         rclcpp::TimerBase::SharedPtr timer_;
@@ -42,6 +44,9 @@ namespace calculadora
 
         std_msgs::msg::Float64 result;
         std_msgs::msg::Float64MultiArray numbers;
-        int numeros[2];
+        double numeros[2];
     };
-};
+
+} // namespace summer_school
+
+#endif 
